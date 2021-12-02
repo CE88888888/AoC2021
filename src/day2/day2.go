@@ -76,11 +76,11 @@ func main() {
 	fmt.Println(submarineAdvanced)
 
 }
-func openFile() *bufio.Scanner {
-	file, err := os.Open("day2.txt")
-	if err != nil {
+func openFile() (scanner *bufio.Scanner) {
+	if file, err := os.Open("day2.txt"); err == nil {
+		scanner = bufio.NewScanner(file)
+	} else {
 		log.Fatal(err)
 	}
-	scanner := bufio.NewScanner(file)
-	return scanner
+	return
 }
