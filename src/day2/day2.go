@@ -18,25 +18,24 @@ type Submarine struct {
 func (s *Submarine) MoveSimple(direction string, amount int) {
 	switch direction {
 	case "up":
-		s.depth = s.depth - amount
+		s.depth -= amount
 	case "down":
-		s.depth = s.depth + amount
+		s.depth += amount
 	case "forward":
-		s.xpos = s.xpos + amount
+		s.xpos += amount
 	}
 }
 
 func (s *Submarine) MoveAdvanced(direction string, amount int) {
 	switch direction {
 	case "up":
-		s.aim = s.aim - amount
+		//	s.aim = s.aim - amount
+		s.aim -= amount
 	case "down":
-		s.aim = s.aim + amount
+		s.aim += amount
 	case "forward":
-		s.xpos = s.xpos + amount
-		if s.aim != 0 {
-			s.depth = s.depth + s.aim*amount
-		}
+		s.xpos += amount
+		s.depth += s.aim * amount
 	}
 }
 
