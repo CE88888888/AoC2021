@@ -29,7 +29,6 @@ func (s *Submarine) MoveSimple(direction string, amount int) {
 func (s *Submarine) MoveAdvanced(direction string, amount int) {
 	switch direction {
 	case "up":
-		//	s.aim = s.aim - amount
 		s.aim -= amount
 	case "down":
 		s.aim += amount
