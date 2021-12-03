@@ -11,6 +11,8 @@ import (
 func main() {
 	//	maxbin := 4095
 	gammaRate, epsilonRate := 0, 0
+	nobits := 12
+
 	var evenArray [12]int
 	var oddArray [12]int
 	var gammaArray [12]int
@@ -27,7 +29,7 @@ func main() {
 		}
 
 		fullSlice = append(fullSlice, current)
-		for i := 0; i < 12; i++ {
+		for i := 0; i < nobits; i++ {
 
 			if current&1 == 1 {
 
@@ -41,7 +43,7 @@ func main() {
 		}
 	}
 
-	for i := 0; i < 12; i++ {
+	for i := 0; i < nobits; i++ {
 
 		if oddArray[i] > evenArray[i] {
 			gammaArray[i] = 1
@@ -61,13 +63,13 @@ func main() {
 
 	}
 
-	oxySlice, co2Slice = filterSplitByBits(fullSlice, oxySlice, co2Slice, 11)
+	oxySlice, co2Slice = filterSplitByBits(fullSlice, oxySlice, co2Slice, nobits-1)
 
-	for i := 10; len(oxySlice) > 1; i-- {
+	for i := nobits - 2; len(oxySlice) > 1; i-- {
 		println(i)
 		oxySlice = filterByBits(oxySlice, i, true)
 	}
-	for i := 10; len(co2Slice) > 1; i-- {
+	for i := nobits - 2; len(co2Slice) > 1; i-- {
 		println(i)
 		co2Slice = filterByBits(co2Slice, i, false)
 	}
@@ -96,7 +98,7 @@ func filterSplitByBits(fullSlice []int64, oxySlice []int64, co2Slice []int64, bi
 	}
 
 }
-func filterByBits(inSlice []int64, bitNumber int, roundup bool) (outSlice []int64) {
+func filterByBits(inSlice []int64, bitNumber int, most bool) (outSlice []int64) {
 	power := IntPow(2, bitNumber)
 	one := outSlice
 	zero := outSlice
@@ -107,15 +109,20 @@ func filterByBits(inSlice []int64, bitNumber int, roundup bool) (outSlice []int6
 			zero = append(zero, value)
 		}
 	}
-	if len(one) > len(zero) {
-		outSlice = one
-	} else if len(one) < len(zero) {
-		outSlice = zero
-	} else if roundup {
-		outSlice = one
+	if most {
+		if len(one) >= len(zero) {
+			outSlice = one
+		} else {
+			outSlice = zero
+		}
 	} else {
-		outSlice = zero
+		if len(one) >= len(zero) {
+			outSlice = zero
+		} else {
+			outSlice = one
+		}
 	}
+
 	return
 }
 
