@@ -14,6 +14,9 @@ func main() {
 	var evenArray [12]int
 	var oddArray [12]int
 	var gammaArray [12]int
+	var fullSlice []int64
+	var oxySlice []int64
+	var co2Slice []int64
 
 	scanner := openFile()
 	for scanner.Scan() {
@@ -23,6 +26,7 @@ func main() {
 			log.Fatal()
 		}
 
+		fullSlice = append(fullSlice, current)
 		for i := 0; i < 12; i++ {
 
 			if current&1 == 1 {
@@ -56,10 +60,63 @@ func main() {
 		}
 
 	}
+
+	oxySlice, co2Slice = filterSplitByBits(fullSlice, oxySlice, co2Slice, 11)
+
+	for i := 10; len(oxySlice) > 1; i-- {
+		println(i)
+		oxySlice = filterByBits(oxySlice, i, true)
+	}
+	for i := 10; len(co2Slice) > 1; i-- {
+		println(i)
+		co2Slice = filterByBits(co2Slice, i, false)
+	}
+
 	fmt.Printf("%08b\n", gammaRate)
 	fmt.Printf("%08b\n", epsilonRate)
 	println(gammaRate * epsilonRate)
 
+	println(oxySlice[0] * co2Slice[0])
+}
+
+func filterSplitByBits(fullSlice []int64, oxySlice []int64, co2Slice []int64, bitNumber int) ([]int64, []int64) {
+	for key, value := range fullSlice {
+		power := IntPow(2, bitNumber)
+		println(key)
+		if (value & int64(power)) == int64(power) {
+			oxySlice = append(oxySlice, value)
+		} else {
+			co2Slice = append(co2Slice, value)
+		}
+	}
+	if len(oxySlice) >= len(co2Slice) {
+		return oxySlice, co2Slice
+	} else {
+		return co2Slice, oxySlice
+	}
+
+}
+func filterByBits(inSlice []int64, bitNumber int, roundup bool) (outSlice []int64) {
+	power := IntPow(2, bitNumber)
+	one := outSlice
+	zero := outSlice
+	for _, value := range inSlice {
+		if (value & int64(power)) == int64(power) {
+			one = append(one, value)
+		} else {
+			zero = append(zero, value)
+		}
+	}
+	if len(one) > len(zero) {
+		outSlice = one
+	} else if len(one) < len(zero) {
+		outSlice = zero
+	} else if roundup {
+		outSlice = one
+	} else {
+		outSlice = zero
+	}
+	return
 }
 
 func openFile() (scanner *bufio.Scanner) {
