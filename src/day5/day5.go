@@ -119,8 +119,7 @@ func main() {
 
 	scanner := openFile()
 	for scanner.Scan() {
-		strline := ""
-		strline = scanner.Text()
+		strline := scanner.Text()
 		pairs := strings.Fields(strline)
 		firstPair := pairs[0]
 		secondPair := pairs[2]
