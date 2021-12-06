@@ -30,26 +30,7 @@ func fokVissen(days int, vissen [9]int) int {
 func newVissen(visjes []int) [9]int {
 	var vissen [9]int
 	for _, value := range visjes {
-		switch value {
-		case 0:
-			vissen[0]++
-		case 1:
-			vissen[1]++
-		case 2:
-			vissen[2]++
-		case 3:
-			vissen[3]++
-		case 4:
-			vissen[4]++
-		case 5:
-			vissen[5]++
-		case 6:
-			vissen[6]++
-		case 7:
-			vissen[7]++
-		case 8:
-			vissen[8]++
-		}
+		vissen[value]++
 	}
 	return vissen
 }
