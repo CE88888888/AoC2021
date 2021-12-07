@@ -42,8 +42,8 @@ func calcCheapFuel(in []int, median int) (fuel int) {
 }
 func calculateFuelCost(n int) int {
 	if n > 1 {
-		a := float64(n+1) / float64(2*n)
-		return int(math.Round((float64(n*n) * a)))
+		a := float64(n+1) / 2
+		return int(math.Round((float64(n) * a)))
 	} else {
 		return n
 	}
