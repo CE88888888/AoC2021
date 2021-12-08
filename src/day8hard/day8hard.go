@@ -49,7 +49,7 @@ func main() {
 
 		//Start counting for Exercise A and while looping also translate the values based on the decodeMap
 		var translated []string
-		count, translated = newFunction(output, count, decodeMap, translated)
+		count, translated = calculateResults(output, count, decodeMap, translated)
 		//With the translated values determine the Digit output
 		outputValues := determineDigits(translated)
 		grandtotal = grandtotal + sliceToInt(outputValues)
@@ -100,7 +100,7 @@ func determineDigits(translated []string) []int {
 	return outputValues
 }
 
-func newFunction(output []string, count int, decodeMap map[string]string, translated []string) (int, []string) {
+func calculateResults(output []string, count int, decodeMap map[string]string, translated []string) (int, []string) {
 	for _, value := range output {
 		if (len(value) == 2) || (len(value) == 3) || (len(value) == 4) || (len(value) == 7) {
 			count++
