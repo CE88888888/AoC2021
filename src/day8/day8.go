@@ -37,28 +37,8 @@ func main() {
 		var len5 []string
 		var len6 []string
 
-		//Exercise B
 		//Determine 1,4,7,8 - fill length 5 & 6 pattern-slices
-		for _, value := range patterns {
-			switch len(value) {
-			case 2:
-				display[1] = value
-
-			case 3:
-				display[7] = value
-
-			case 4:
-				display[4] = value
-
-			case 5:
-				len5 = append(len5, value)
-			case 6:
-				len6 = append(len6, value)
-			case 7:
-				display[8] = value
-
-			}
-		}
+		matchPatternToDigit(patterns, display, &len5, &len6)
 
 		determineLen5Values(len5, display)
 		determineLen6Values(len6, display)
@@ -67,17 +47,34 @@ func main() {
 		switchedDisplay := SwitchKVMap(display)
 		var total int
 		total, count = calculateResult(output, count, switchedDisplay)
-
 		grandtotal += total
-
 	}
 	fmt.Println("Exercise A: ", count)
 	fmt.Println("Exercise B: ", grandtotal)
 }
 
-func SwitchKVMap(display map[int]string) (switchedMap map[string]int) {
+func matchPatternToDigit(patterns []string, display map[int]string, len5 *[]string, len6 *[]string) {
+	for _, value := range patterns {
+		switch len(value) {
+		case 2:
+			display[1] = value
+		case 3:
+			display[7] = value
+		case 4:
+			display[4] = value
+		case 5:
+			*len5 = append(*len5, value)
+		case 6:
+			*len6 = append(*len6, value)
+		case 7:
+			display[8] = value
+		}
+	}
+}
+
+func SwitchKVMap(m map[int]string) (switchedMap map[string]int) {
 	switchedMap = make(map[string]int)
-	for i, s := range display {
+	for i, s := range m {
 		switchedMap[SortStringByCharacter(s)] = i
 	}
 	return
