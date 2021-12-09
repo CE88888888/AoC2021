@@ -16,10 +16,12 @@ type coord struct {
 	col int
 }
 
+var maxRow, maxColumn int
+
 func main() {
 	scanner := openFile("day9.txt")
 	//scanner := openFile("ex9.txt")
-	matrix, maxRow, maxColumn := initMatrix(scanner)
+	matrix := initMatrix(scanner)
 
 	lowestpoints := []int{}
 	bassins := []Bassin{}
@@ -28,7 +30,7 @@ func main() {
 
 	for r := 0; r < maxRow; r++ {
 		for c := 0; c < maxColumn; c++ {
-			p := pickLowest(r, c, matrix, maxRow, maxColumn)
+			p := pickLowest(r, c, matrix)
 			if p < 9 {
 				lowestpoints = append(lowestpoints, p)
 				risksum = risksum + p + 1
@@ -46,7 +48,7 @@ func main() {
 
 	for b, value := range bassins {
 		checkedCoords := []coord{}
-		determineBassinSize(value.coord, &bassins[b], matrix, maxRow, maxColumn, &checkedCoords)
+		determineBassinSize(value.coord, &bassins[b], matrix, &checkedCoords)
 		bassinSizes = append(bassinSizes, bassins[b].size)
 	}
 
@@ -54,17 +56,20 @@ func main() {
 	a, b, c := bassinSizes[len(bassinSizes)-1], bassinSizes[len(bassinSizes)-2], bassinSizes[len(bassinSizes)-3]
 	println("Exercise A:", risksum)
 	println("Exercise B:", a*b*c)
+
 }
 
-func determineBassinSize(co coord, b *Bassin, matrix [][]int, maxRow int, maxColumn int, cc *[]coord) {
+func determineBassinSize(co coord, b *Bassin, matrix [][]int, cc *[]coord) {
 
 	r, c := co.row, co.col
 	depth := matrix[r][c]
 
+	//ignore Nines
 	if depth > 8 {
 		return
 	}
 
+	//check if already visited
 	for _, value := range *cc {
 		if value == co {
 			return
@@ -75,33 +80,33 @@ func determineBassinSize(co coord, b *Bassin, matrix [][]int, maxRow int, maxCol
 	b.size++
 	*cc = append(*cc, co)
 
-	if r > 0 && matrix[r-1][c] == depth+1 {
+	if r > 0 {
 		determineBassinSize(coord{
 			row: r - 1,
 			col: c,
-		}, b, matrix, maxRow, maxColumn, cc)
+		}, b, matrix, cc)
 	}
-	if r < maxRow-1 && matrix[r+1][c] == depth+1 {
+	if r < maxRow-1 {
 		determineBassinSize(coord{
 			row: r + 1,
 			col: c,
-		}, b, matrix, maxRow, maxColumn, cc)
+		}, b, matrix, cc)
 	}
-	if c > 0 && matrix[r][c-1] == depth+1 {
+	if c > 0 {
 		determineBassinSize(coord{
 			row: r,
 			col: c - 1,
-		}, b, matrix, maxRow, maxColumn, cc)
+		}, b, matrix, cc)
 	}
-	if c < maxColumn-1 && matrix[r][c+1] == depth+1 {
+	if c < maxColumn-1 {
 		determineBassinSize(coord{
 			row: r,
 			col: c + 1,
-		}, b, matrix, maxRow, maxColumn, cc)
+		}, b, matrix, cc)
 	}
 }
 
-func pickLowest(r, c int, matrix [][]int, maxRow int, maxColumn int) int {
+func pickLowest(r, c int, matrix [][]int) int {
 	sample := []int{}
 	if r > 0 {
 		sample = append(sample, matrix[r-1][c])
@@ -124,9 +129,9 @@ func pickLowest(r, c int, matrix [][]int, maxRow int, maxColumn int) int {
 	}
 }
 
-func initMatrix(scanner *bufio.Scanner) ([][]int, int, int) {
+func initMatrix(scanner *bufio.Scanner) [][]int {
 	var matrix [][]int
-	maxRow, maxColumn := 0, 0
+	//maxRow, maxColumn := 0, 0
 
 	for scanner.Scan() {
 		maxRow++
@@ -140,7 +145,7 @@ func initMatrix(scanner *bufio.Scanner) ([][]int, int, int) {
 		}
 		matrix = append(matrix, row)
 	}
-	return matrix, maxRow, maxColumn
+	return matrix
 }
 
 func openFile(file string) (scanner *bufio.Scanner) {
