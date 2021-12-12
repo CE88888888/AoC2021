@@ -22,28 +22,21 @@ func main() {
 	paths := initPaths(scanner)
 
 	start := Point{p: "start", v: 8}
-
-	routes := [][]Point{}
-	route := []Point{start}
-	routes = append(routes, route)
+	routes := [][]Point{{start}}
 
 	for i := 0; i < len(routes); i++ {
-		notEnd := true
-		for notEnd {
+		notDone := true
+		for notDone {
 			p1 := routes[i]
 			current := p1[len(p1)-1]
 
 			if current.p == strings.ToLower(current.p) && current.p != "start" {
 				p1[len(p1)-1].v = 1
 			}
-			if current.p == "end" {
-				notEnd = false
-			}
-
 			possibles := getNextPoints(current, paths, routes[i])
 
-			if len(possibles) == 0 {
-				notEnd = false
+			if len(possibles) == 0 || current.p == "end" {
+				notDone = false
 			} else {
 				for j := 1; j < len(possibles); j++ {
 					newPad := make([]Point, len(p1))
@@ -56,6 +49,7 @@ func main() {
 		}
 	}
 
+	//clean up paths with no END
 	endingPaths := [][]Point{}
 	for i := range routes {
 		lastpoint := routes[i][len(routes[i])-1]
