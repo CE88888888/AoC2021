@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"math"
 	"os"
 	"strings"
 )
@@ -52,8 +53,7 @@ func main() {
 	}
 	eleB = translatePairToSingle(paircount, eleB, rules)
 	minB, maxB := getLowMax(eleB)
-	fmt.Println(((maxB - minB) / 2) + 1)
-
+	fmt.Println(int(math.Round(float64(maxB-minB) / 2)))
 }
 
 func newPairCount(rules map[string]string, poly []string) map[string]int {
