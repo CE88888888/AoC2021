@@ -33,7 +33,7 @@ func main() {
 	paths := []Point{start}
 	costtoend := 0
 
-	//Exercise B init
+	//Exercise A+B init
 	grid = enlargeGrid(&grid, 5)
 	maxrow = len(grid) - 1
 	maxcol = len(grid[0]) - 1
